@@ -1,18 +1,25 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+// 1. Import the 'Variants' type from framer-motion
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
-// Reusable animation variants
-const fadeUp = {
+// 2. Explicitly type your animation objects as Variants
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
+  }
 };
 
-const staggerContainer = {
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+  visible: { 
+    opacity: 1, 
+    transition: { staggerChildren: 0.15 } 
+  }
 };
 
 export default function SinglePageExperience() {
