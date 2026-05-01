@@ -1,204 +1,118 @@
 'use client';
-import { useState, useEffect } from 'react';
+
 import Image from 'next/image';
-// 1. Import the 'Variants' type from framer-motion
-import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
-// 2. Explicitly type your animation objects as Variants
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
-  }
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
 };
 
-const staggerContainer: Variants = {
+const stagger: Variants = {
   hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1, 
-    transition: { staggerChildren: 0.15 } 
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
-export default function SinglePageExperience() {
-  const [isLoading, setIsLoading] = useState(true);
+const codePoints = [
+  {
+    title: 'Performance-First Formulation',
+    body: 'Every formula is built to deliver real results—not trends, not hype. Just what works.',
+  },
+  {
+    title: 'Raw Ingredient Integrity',
+    body: 'We don’t just choose ingredients—we choose where they come from. Purity, sourcing, and consistency are non-negotiable.',
+  },
+  {
+    title: 'Third-Party Tested',
+    body: 'Our supplements undergo four rounds of testing, rigorous ingredient validation, and trusted third-party certification—ensuring uncompromised quality and accuracy.',
+  },
+  {
+    title: 'Transparent Labels',
+    body: 'No proprietary blends. Nothing hidden. Every ingredient, precisely disclosed with its exact dose.',
+  },
+];
 
-  // Simulate loading time (e.g., 2.5 seconds)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, []);
-
+export default function Home() {
   return (
-    <main className="bg-zinc-950 text-white font-sans selection:bg-blue-600 selection:text-white overflow-hidden relative">
-      
-      {/* --- PRE-LOADER (The Suspense) --- */}
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div 
-            key="loader"
-            exit={{ y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-            className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
-          >
-            <div className="relative w-32 h-32 mb-8">
-               {/* Replace with your actual logo path */}
-              <Image src="/brand_logo_without_background.png" alt="Logo" fill className="object-contain animate-pulse" priority />
-            </div>
-            <div className="overflow-hidden">
-              <motion.h1 
-                initial={{ y: "100%" }} animate={{ y: 0 }} transition={{ duration: 0.5 }}
-                className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white italic"
-              >
-                INITIALIZING...
-              </motion.h1>
-            </div>
-            <motion.div 
-              className="w-48 h-1 bg-zinc-800 mt-6 relative overflow-hidden"
-            >
-              <motion.div 
-                initial={{ x: "-100%" }} animate={{ x: "0%" }} transition={{ duration: 2.5, ease: "easeInOut" }}
-                className="absolute inset-0 bg-blue-600"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* --- NAVIGATION --- */}
-      <nav className="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-difference">
-        <span className="text-xl md:text-2xl font-black tracking-tighter uppercase italic text-white">
-          GET ENHANCED
-        </span>
-        <div className="hidden lg:flex gap-6 text-[10px] md:text-xs font-bold tracking-widest uppercase text-white">
-          <a href="#story" className="hover:text-blue-500 transition">Our Story</a>
-          <a href="#never-average" className="hover:text-blue-500 transition">Never Average</a>
-          <a href="#journal" className="hover:text-blue-500 transition">Journal</a>
-          <a href="#lab-reports" className="hover:text-blue-500 transition">Lab Tests</a>
+    <main className="bg-[#03050a] text-white">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#03050a]/90 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
+          <div className="flex items-center gap-3">
+            <Image src="/brand_logo_without_background.png" alt="Get Enhanced" width={38} height={38} priority />
+            <span className="text-lg font-black tracking-tight">GET ENHANCED</span>
+          </div>
+          <nav className="hidden items-center gap-7 text-sm font-medium text-zinc-300 md:flex">
+            <a href="#never-average" className="transition hover:text-white">Never Average</a>
+            <a href="#our-story" className="transition hover:text-white">Our Story</a>
+            <a href="#enhanced-code" className="transition hover:text-white">The Enhanced Code</a>
+          </nav>
         </div>
-        <button className="text-[10px] md:text-xs font-bold tracking-widest uppercase border border-white px-6 py-2 hover:bg-white hover:text-black transition">
-          Shop Now
-        </button>
-      </nav>
+      </header>
 
-      {/* --- 1. HERO SECTION --- */}
-      <section className="relative h-screen flex items-center justify-center text-center px-6">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(30,58,138,0.2),transparent_60%)] pointer-events-none" />
-        
-        <motion.div initial="hidden" animate={!isLoading ? "visible" : "hidden"} variants={staggerContainer} className="z-10 flex flex-col items-center">
-          <motion.h1 variants={fadeUp} className="text-6xl md:text-[9rem] font-black uppercase tracking-tighter leading-[0.85] mb-6">
-            Evolve <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-600">Or Remain.</span>
-          </motion.h1>
-          <motion.p variants={fadeUp} className="text-zinc-400 max-w-lg text-lg md:text-xl font-medium">
-            Fueling performance, everywhere. The highest standard of clinical supplementation.
-          </motion.p>
-        </motion.div>
-      </section>
-
-      {/* --- 2. OUR STORY --- */}
-      <section id="story" className="py-32 px-6 md:px-20 bg-white text-black">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <div className="lg:sticky lg:top-32">
-            <motion.h2 variants={fadeUp} className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none">Our <br/> Story</motion.h2>
-            <motion.div variants={fadeUp} className="w-20 h-2 bg-blue-600 mt-8" />
-          </div>
-          <div className="space-y-8 text-lg text-zinc-600 font-medium leading-relaxed">
-            <motion.p variants={fadeUp}><strong className="text-black">If you’ve ever started going to the gym, you probably remember why.</strong> You want to look better or feel more confident. But stick with it, and something shifts.</motion.p>
-            <motion.p variants={fadeUp}>It becomes about getting stronger, beating your last workout, and becoming more disciplined. Deep down, we’re all chasing the same thing — to be better than yesterday.</motion.p>
-            <motion.p variants={fadeUp}>We believe your supplements should actually support that effort — with clean ingredients, honest formulations, and no hype. Just progress, one step at a time.</motion.p>
-            <motion.p variants={fadeUp} className="text-2xl font-black text-black italic tracking-tight pt-8 border-t border-zinc-200">Never Settle For Average.</motion.p>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* --- 3. NEVER AVERAGE & THE CODE --- */}
-      <section id="never-average" className="py-32 px-6 bg-zinc-950 flex flex-col items-center text-center">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto mb-32">
-          <motion.h2 variants={fadeUp} className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white mb-8">Never Average.</motion.h2>
-          <motion.p variants={fadeUp} className="text-xl md:text-2xl text-zinc-400 mb-8">You push through the sets that break you. You’ve never been okay with average. So why settle for ordinary supplements?</motion.p>
-        </motion.div>
-      </section>
-
-      {/* --- 4. ENHANCED JOURNAL (Community & Blog) --- */}
-      <section id="journal" className="py-32 px-6 bg-zinc-900 border-y border-zinc-800">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-7xl mx-auto">
-          <motion.div variants={fadeUp} className="flex justify-between items-end mb-16">
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase">The Journal</h2>
-            <span className="text-blue-500 text-sm font-bold tracking-widest uppercase hover:text-white transition cursor-pointer">View All</span>
+      <section id="never-average" className="mx-auto grid max-w-7xl grid-cols-1 px-5 py-8 md:px-8 lg:grid-cols-[0.9fr_1.1fr]">
+        <motion.article initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={stagger} className="order-2 bg-white px-6 py-10 text-black md:px-12 md:py-16 lg:order-1">
+          <motion.p variants={fadeUp} className="mb-4 text-sm font-semibold tracking-[0.18em] text-zinc-500">01</motion.p>
+          <motion.h1 variants={fadeUp} className="mb-6 text-5xl font-black leading-[0.9] tracking-tight md:text-7xl">NEVER AVERAGE</motion.h1>
+          <motion.div variants={fadeUp} className="space-y-6 text-lg leading-relaxed text-zinc-800">
+            <p>You don’t stop when it gets tough. You push through the reps that burn, the sets that break you. You’ve never been okay with average — not in the gym, not in life.</p>
+            <p>So why settle for ordinary supplements?</p>
+            <p>Get Enhanced brings you a higher standard of supplementation — where quality isn’t claimed, it’s evident.</p>
+            <p>It is Made for the days you push harder. Made for the days you don’t stop. Made to keep up — every single time.</p>
+            <p className="font-semibold">Average was never part of you.</p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
-              <motion.div key={item} variants={fadeUp} className="group cursor-pointer">
-                <div className="w-full h-64 bg-zinc-800 rounded-lg mb-6 overflow-hidden relative">
-                  {/* Placeholder for Blog Images */}
-                  <div className="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition duration-500" />
-                </div>
-                <h3 className="text-2xl font-bold uppercase tracking-tight mb-2 group-hover:text-blue-500 transition">Training Beyond Failure</h3>
-                <p className="text-zinc-400 text-sm">Discover the science behind hypertrophy and elite recovery protocols.</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
+        </motion.article>
 
-      {/* --- 5. WHERE TO BUY & 6. LAB REPORTS (Split Section) --- */}
-      <section id="lab-reports" className="py-0 flex flex-col md:flex-row bg-white text-black min-h-[60vh]">
-        {/* Lab Reports (Left) */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="flex-1 p-12 md:p-24 flex flex-col justify-center border-b md:border-b-0 md:border-r border-zinc-200">
-          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-black tracking-tighter uppercase mb-6">100% Transparency.</motion.h2>
-          <motion.p variants={fadeUp} className="text-zinc-600 mb-8 max-w-md">Every batch is rigorously tested. No proprietary blends. View our third-party clinical certificates directly.</motion.p>
-          <motion.button variants={fadeUp} className="self-start border border-black px-8 py-4 text-xs font-bold tracking-widest uppercase hover:bg-black hover:text-white transition">
-            View Lab Reports
-          </motion.button>
-        </motion.div>
-
-        {/* Where to Buy (Right) */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="flex-1 p-12 md:p-24 bg-zinc-50 flex flex-col justify-center">
-          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-black tracking-tighter uppercase mb-6">Where to Buy.</motion.h2>
-          <motion.p variants={fadeUp} className="text-zinc-600 mb-8 max-w-md">Secure your stack directly through our platform or our verified global retail partners.</motion.p>
-          <motion.button variants={fadeUp} className="self-start bg-blue-600 text-white px-8 py-4 text-xs font-bold tracking-widest uppercase hover:bg-blue-700 transition">
-            Order on Amazon
-          </motion.button>
-        </motion.div>
-      </section>
-
-      {/* --- 7. BECOME A DISTRIBUTOR & 8. CONTACT US (Heavy Footer) --- */}
-      <section className="bg-zinc-950 pt-32 pb-12 px-6">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 border-b border-zinc-800 pb-20">
-          
-          {/* Become a Distributor */}
-          <div>
-            <motion.h2 variants={fadeUp} className="text-5xl font-black tracking-tighter uppercase mb-6 text-white">Command Your <br/><span className="text-blue-600">Territory.</span></motion.h2>
-            <motion.p variants={fadeUp} className="text-zinc-400 mb-10 max-w-md">Join our elite network of global distributors. Bring the new standard of supplementation to your community.</motion.p>
-            <motion.button variants={fadeUp} className="bg-white text-black px-8 py-4 text-xs font-bold tracking-widest uppercase hover:bg-zinc-200 transition">
-              Apply For Distribution
-            </motion.button>
-          </div>
-
-          {/* Contact Us Form */}
-          <div className="bg-zinc-900 p-8 md:p-10 rounded-xl">
-            <motion.h3 variants={fadeUp} className="text-2xl font-black tracking-tighter uppercase mb-6">Contact The Team</motion.h3>
-            <motion.form variants={staggerContainer} className="space-y-4">
-              <motion.input variants={fadeUp} type="text" placeholder="YOUR NAME" className="w-full bg-zinc-950 border border-zinc-800 text-white px-4 py-3 text-xs font-mono focus:border-blue-500 outline-none" />
-              <motion.input variants={fadeUp} type="email" placeholder="EMAIL ADDRESS" className="w-full bg-zinc-950 border border-zinc-800 text-white px-4 py-3 text-xs font-mono focus:border-blue-500 outline-none" />
-              <motion.textarea variants={fadeUp} placeholder="MESSAGE" rows={4} className="w-full bg-zinc-950 border border-zinc-800 text-white px-4 py-3 text-xs font-mono focus:border-blue-500 outline-none resize-none" />
-              <motion.button variants={fadeUp} className="w-full bg-blue-600 text-white py-4 text-xs font-bold tracking-widest uppercase hover:bg-blue-700 transition">
-                Send Transmission
-              </motion.button>
-            </motion.form>
-          </div>
-        </motion.div>
-
-        {/* True Footer */}
-        <div className="text-center text-zinc-600 text-[10px] font-mono uppercase tracking-widest mt-12">
-          © 2026 GET ENHANCED. ALL RIGHTS RESERVED. <br className="md:hidden" /> | BUILT FOR THE ELITE.
+        <div className="order-1 relative min-h-[360px] overflow-hidden lg:order-2">
+          <Image src="/hero-bg.png" alt="Transform your journey" fill priority className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-l from-black/45 via-black/15 to-transparent" />
         </div>
       </section>
 
+      <section id="our-story" className="bg-white py-14 text-black md:py-20">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={stagger} className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 md:px-8 lg:grid-cols-[1fr_1.1fr]">
+          <motion.div variants={fadeUp} className="relative min-h-[360px] overflow-hidden rounded-sm bg-zinc-950">
+            <Image src="/brand_logo.jpeg" alt="Our story visual" fill className="object-cover" />
+          </motion.div>
+          <motion.article variants={fadeUp} className="space-y-4">
+            <h2 className="text-5xl font-black tracking-tight md:text-6xl">OUR STORY</h2>
+            <p className="text-lg leading-relaxed">If you’ve ever started going to the gym, you probably remember why.</p>
+            <p className="text-lg leading-relaxed">For most people, it’s simple. You want abs, you want to look better or Maybe you just want to feel more confident. So you start training.</p>
+            <p className="text-lg leading-relaxed">At first it’s all about the mirror…checking if anything has changed yet.</p>
+            <p className="text-lg leading-relaxed">But if you stick with it long enough, something shifts.</p>
+            <p className="text-lg leading-relaxed">You stop worrying so much about abs. You start thinking about getting stronger, beating your last workout or becoming more disciplined.</p>
+            <p className="text-lg leading-relaxed">And somewhere along the way, you realize the gym was never really about getting abs.</p>
+            <p className="text-lg leading-relaxed">It’s about the person you’re becoming.</p>
+            <p className="text-lg leading-relaxed">More focused. More consistent. A little stronger every day.</p>
+            <p className="text-lg leading-relaxed">And deep down, we’re all chasing the same thing — to be better than we were yesterday.</p>
+            <p className="text-lg leading-relaxed">That’s the mindset behind Get Enhanced.</p>
+            <p className="text-lg leading-relaxed">Our journey goes beyond physical transformation, helping people exceed expectations and win in all areas of life.</p>
+            <p className="text-lg leading-relaxed">We just believe that when someone is putting in real work, their supplements should actually support that effort — with clean ingredients, honest formulations, and no unnecessary hype.</p>
+            <p className="text-lg leading-relaxed">Because at the end of the day, progress isn’t about being perfect.</p>
+            <p className="text-lg leading-relaxed">It’s about showing up, putting in the work, and moving forward — one step at a time.</p>
+            <p className="text-lg leading-relaxed">And if that’s the mindset you live by, you’re already part of Get Enhanced.</p>
+            <p className="pt-2 text-3xl font-black italic">Never Settle for Average.</p>
+          </motion.article>
+        </motion.div>
+      </section>
+
+      <section id="enhanced-code" className="bg-[#f3f3f3] py-14 text-black md:py-20">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-0 overflow-hidden px-5 md:px-8 lg:grid-cols-2">
+          <div className="bg-white px-6 py-10 md:px-10">
+            <h3 className="mb-8 text-4xl font-black tracking-tight md:text-5xl">THE ENHANCED CODE</h3>
+            <div className="space-y-7">
+              {codePoints.map((point, i) => (
+                <article key={point.title}>
+                  <h4 className="text-3xl font-black">{i + 1}. {point.title}</h4>
+                  <p className="mt-1 text-2xl leading-relaxed text-zinc-800">{point.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+          <div className="relative min-h-[500px] bg-zinc-200">
+            <Image src="/hero-bg.png" alt="Get Enhanced product visual" fill className="object-cover object-center" />
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
