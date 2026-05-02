@@ -1,204 +1,159 @@
 'use client';
-import { useState, useEffect } from 'react';
+
 import Image from 'next/image';
-// 1. Import the 'Variants' type from framer-motion
-import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { Caveat, Inter, Oswald } from 'next/font/google';
+import { motion } from 'framer-motion';
+import type { Variants } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
-// 2. Explicitly type your animation objects as Variants
+const oswald = Oswald({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
+const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'] });
+const caveat = Caveat({ subsets: ['latin'], weight: ['700'] });
+
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
-  }
+  hidden: { opacity: 0, y: 32 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
-const staggerContainer: Variants = {
+const stagger: Variants = {
   hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1, 
-    transition: { staggerChildren: 0.15 } 
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
 };
 
-export default function SinglePageExperience() {
-  const [isLoading, setIsLoading] = useState(true);
+const animateImage = {
+  initial: { scale: 1.02 },
+  animate: { scale: 1.07, y: [-6, 6, -6] },
+  transition: { duration: 12, repeat: Infinity, ease: 'easeInOut' },
+};
 
-  // Simulate loading time (e.g., 2.5 seconds)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, []);
+const navItems = [
+  'Our Story',
+  'Enhanced Life - Join our community',
+  'Enhanced Journal',
+  'Where to Buy',
+  'Lab Test Reports',
+  'Become a Distributor',
+  'Contact Us',
+];
 
+export default function Page() {
   return (
-    <main className="bg-zinc-950 text-white font-sans selection:bg-blue-600 selection:text-white overflow-hidden relative">
-      
-      {/* --- PRE-LOADER (The Suspense) --- */}
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div 
-            key="loader"
-            exit={{ y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-            className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
-          >
-            <div className="relative w-32 h-32 mb-8">
-               {/* Replace with your actual logo path */}
-              <Image src="/brand_logo_without_background.png" alt="Logo" fill className="object-contain animate-pulse" priority />
-            </div>
-            <div className="overflow-hidden">
-              <motion.h1 
-                initial={{ y: "100%" }} animate={{ y: 0 }} transition={{ duration: 0.5 }}
-                className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white italic"
-              >
-                INITIALIZING...
-              </motion.h1>
-            </div>
-            <motion.div 
-              className="w-48 h-1 bg-zinc-800 mt-6 relative overflow-hidden"
-            >
-              <motion.div 
-                initial={{ x: "-100%" }} animate={{ x: "0%" }} transition={{ duration: 2.5, ease: "easeInOut" }}
-                className="absolute inset-0 bg-blue-600"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* --- NAVIGATION --- */}
-      <nav className="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-difference">
-        <span className="text-xl md:text-2xl font-black tracking-tighter uppercase italic text-white">
-          GET ENHANCED
-        </span>
-        <div className="hidden lg:flex gap-6 text-[10px] md:text-xs font-bold tracking-widest uppercase text-white">
-          <a href="#story" className="hover:text-blue-500 transition">Our Story</a>
-          <a href="#never-average" className="hover:text-blue-500 transition">Never Average</a>
-          <a href="#journal" className="hover:text-blue-500 transition">Journal</a>
-          <a href="#lab-reports" className="hover:text-blue-500 transition">Lab Tests</a>
-        </div>
-        <button className="text-[10px] md:text-xs font-bold tracking-widest uppercase border border-white px-6 py-2 hover:bg-white hover:text-black transition">
-          Shop Now
-        </button>
-      </nav>
-
-      {/* --- 1. HERO SECTION --- */}
-      <section className="relative h-screen flex items-center justify-center text-center px-6">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(30,58,138,0.2),transparent_60%)] pointer-events-none" />
-        
-        <motion.div initial="hidden" animate={!isLoading ? "visible" : "hidden"} variants={staggerContainer} className="z-10 flex flex-col items-center">
-          <motion.h1 variants={fadeUp} className="text-6xl md:text-[9rem] font-black uppercase tracking-tighter leading-[0.85] mb-6">
-            Evolve <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-600">Or Remain.</span>
-          </motion.h1>
-          <motion.p variants={fadeUp} className="text-zinc-400 max-w-lg text-lg md:text-xl font-medium">
-            Fueling performance, everywhere. The highest standard of clinical supplementation.
-          </motion.p>
-        </motion.div>
-      </section>
-
-      {/* --- 2. OUR STORY --- */}
-      <section id="story" className="py-32 px-6 md:px-20 bg-white text-black">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <div className="lg:sticky lg:top-32">
-            <motion.h2 variants={fadeUp} className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none">Our <br/> Story</motion.h2>
-            <motion.div variants={fadeUp} className="w-20 h-2 bg-blue-600 mt-8" />
+    <div
+      className={`${inter.className} text-[#0c0c0c]`}
+      style={{ background: 'linear-gradient(180deg, #0a0a0a 0 96px, #ece8e1 96px 100%)' }}
+    >
+      <div className="mx-auto w-[min(calc(100%-28px),1180px)] pb-20">
+        <header className="flex min-h-24 items-center justify-between gap-6 text-white">
+          <div className="flex items-center gap-3.5 font-extrabold tracking-[0.04em]">
+            <span className="relative h-[34px] w-[34px] rotate-45 border-2 border-white after:absolute after:inset-[7px] after:border-r-2 after:border-t-2 after:content-['']" />
+            <span>GET ENHANCED</span>
           </div>
-          <div className="space-y-8 text-lg text-zinc-600 font-medium leading-relaxed">
-            <motion.p variants={fadeUp}><strong className="text-black">If you’ve ever started going to the gym, you probably remember why.</strong> You want to look better or feel more confident. But stick with it, and something shifts.</motion.p>
-            <motion.p variants={fadeUp}>It becomes about getting stronger, beating your last workout, and becoming more disciplined. Deep down, we’re all chasing the same thing — to be better than yesterday.</motion.p>
-            <motion.p variants={fadeUp}>We believe your supplements should actually support that effort — with clean ingredients, honest formulations, and no hype. Just progress, one step at a time.</motion.p>
-            <motion.p variants={fadeUp} className="text-2xl font-black text-black italic tracking-tight pt-8 border-t border-zinc-200">Never Settle For Average.</motion.p>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* --- 3. NEVER AVERAGE & THE CODE --- */}
-      <section id="never-average" className="py-32 px-6 bg-zinc-950 flex flex-col items-center text-center">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto mb-32">
-          <motion.h2 variants={fadeUp} className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white mb-8">Never Average.</motion.h2>
-          <motion.p variants={fadeUp} className="text-xl md:text-2xl text-zinc-400 mb-8">You push through the sets that break you. You’ve never been okay with average. So why settle for ordinary supplements?</motion.p>
-        </motion.div>
-      </section>
-
-      {/* --- 4. ENHANCED JOURNAL (Community & Blog) --- */}
-      <section id="journal" className="py-32 px-6 bg-zinc-900 border-y border-zinc-800">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-7xl mx-auto">
-          <motion.div variants={fadeUp} className="flex justify-between items-end mb-16">
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase">The Journal</h2>
-            <span className="text-blue-500 text-sm font-bold tracking-widest uppercase hover:text-white transition cursor-pointer">View All</span>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
-              <motion.div key={item} variants={fadeUp} className="group cursor-pointer">
-                <div className="w-full h-64 bg-zinc-800 rounded-lg mb-6 overflow-hidden relative">
-                  {/* Placeholder for Blog Images */}
-                  <div className="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition duration-500" />
-                </div>
-                <h3 className="text-2xl font-bold uppercase tracking-tight mb-2 group-hover:text-blue-500 transition">Training Beyond Failure</h3>
-                <p className="text-zinc-400 text-sm">Discover the science behind hypertrophy and elite recovery protocols.</p>
-              </motion.div>
+          <nav className="hidden flex-wrap gap-7 text-sm text-white/85 lg:flex">
+            {navItems.map((item) => (
+              <span key={item}>{item}</span>
             ))}
-          </div>
-        </motion.div>
-      </section>
+          </nav>
+        </header>
 
-      {/* --- 5. WHERE TO BUY & 6. LAB REPORTS (Split Section) --- */}
-      <section id="lab-reports" className="py-0 flex flex-col md:flex-row bg-white text-black min-h-[60vh]">
-        {/* Lab Reports (Left) */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="flex-1 p-12 md:p-24 flex flex-col justify-center border-b md:border-b-0 md:border-r border-zinc-200">
-          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-black tracking-tighter uppercase mb-6">100% Transparency.</motion.h2>
-          <motion.p variants={fadeUp} className="text-zinc-600 mb-8 max-w-md">Every batch is rigorously tested. No proprietary blends. View our third-party clinical certificates directly.</motion.p>
-          <motion.button variants={fadeUp} className="self-start border border-black px-8 py-4 text-xs font-bold tracking-widest uppercase hover:bg-black hover:text-white transition">
-            View Lab Reports
-          </motion.button>
-        </motion.div>
+        <main className="overflow-hidden bg-white shadow-[0_20px_50px_rgba(0,0,0,.08)]">
+          <section className="grid min-h-[720px] border-b border-black/10 bg-[#f5f2ec] md:grid-cols-[.92fr_1.08fr]">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }} variants={stagger} className="flex flex-col justify-center gap-[18px] p-[clamp(28px,4vw,64px)]">
+              <motion.div variants={fadeUp} className="flex items-center gap-[18px] text-[13px] uppercase tracking-[.18em] text-[#383838] before:h-[2px] before:w-[38px] before:bg-black/35 before:content-[''] after:h-[2px] after:w-[38px] after:bg-black/35 after:content-['']">01</motion.div>
+              <motion.h1 variants={fadeUp} className={`${oswald.className} m-0 max-w-[6ch] text-[clamp(54px,7vw,92px)] uppercase leading-[.92] tracking-[.01em]`}>Never Average</motion.h1>
+              {[
+                'You don’t stop when it gets tough. You push through the reps that burn, the sets that break you. You’ve never been okay with average — not in the gym, not in life.',
+                'So why settle for ordinary supplements?',
+                'Get Enhanced brings you a higher standard of supplementation — where quality isn’t claimed, it’s evident.',
+                'It is made for the days you push harder. Made for the days you don’t stop.',
+                'Made to keep up — every single time.',
+              ].map((text) => (
+                <motion.p key={text} variants={fadeUp} className="m-0 max-w-[24ch] text-[clamp(16px,1.5vw,21px)] leading-[1.65] text-[#545454]">{text}</motion.p>
+              ))}
+            </motion.div>
+            <motion.div className="relative overflow-hidden" {...animateImage}>
+              <Image src="/hero-bg.png" alt="Never Average reference screen" fill className="object-cover" priority />
+            </motion.div>
+          </section>
 
-        {/* Where to Buy (Right) */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="flex-1 p-12 md:p-24 bg-zinc-50 flex flex-col justify-center">
-          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-black tracking-tighter uppercase mb-6">Where to Buy.</motion.h2>
-          <motion.p variants={fadeUp} className="text-zinc-600 mb-8 max-w-md">Secure your stack directly through our platform or our verified global retail partners.</motion.p>
-          <motion.button variants={fadeUp} className="self-start bg-blue-600 text-white px-8 py-4 text-xs font-bold tracking-widest uppercase hover:bg-blue-700 transition">
-            Order on Amazon
-          </motion.button>
-        </motion.div>
-      </section>
-
-      {/* --- 7. BECOME A DISTRIBUTOR & 8. CONTACT US (Heavy Footer) --- */}
-      <section className="bg-zinc-950 pt-32 pb-12 px-6">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 border-b border-zinc-800 pb-20">
-          
-          {/* Become a Distributor */}
-          <div>
-            <motion.h2 variants={fadeUp} className="text-5xl font-black tracking-tighter uppercase mb-6 text-white">Command Your <br/><span className="text-blue-600">Territory.</span></motion.h2>
-            <motion.p variants={fadeUp} className="text-zinc-400 mb-10 max-w-md">Join our elite network of global distributors. Bring the new standard of supplementation to your community.</motion.p>
-            <motion.button variants={fadeUp} className="bg-white text-black px-8 py-4 text-xs font-bold tracking-widest uppercase hover:bg-zinc-200 transition">
-              Apply For Distribution
-            </motion.button>
-          </div>
-
-          {/* Contact Us Form */}
-          <div className="bg-zinc-900 p-8 md:p-10 rounded-xl">
-            <motion.h3 variants={fadeUp} className="text-2xl font-black tracking-tighter uppercase mb-6">Contact The Team</motion.h3>
-            <motion.form variants={staggerContainer} className="space-y-4">
-              <motion.input variants={fadeUp} type="text" placeholder="YOUR NAME" className="w-full bg-zinc-950 border border-zinc-800 text-white px-4 py-3 text-xs font-mono focus:border-blue-500 outline-none" />
-              <motion.input variants={fadeUp} type="email" placeholder="EMAIL ADDRESS" className="w-full bg-zinc-950 border border-zinc-800 text-white px-4 py-3 text-xs font-mono focus:border-blue-500 outline-none" />
-              <motion.textarea variants={fadeUp} placeholder="MESSAGE" rows={4} className="w-full bg-zinc-950 border border-zinc-800 text-white px-4 py-3 text-xs font-mono focus:border-blue-500 outline-none resize-none" />
-              <motion.button variants={fadeUp} className="w-full bg-blue-600 text-white py-4 text-xs font-bold tracking-widest uppercase hover:bg-blue-700 transition">
-                Send Transmission
+          <section className="grid min-h-[700px] border-b border-black/10 bg-[#f7f4ee] md:grid-cols-[.38fr_.62fr]">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="relative flex flex-col justify-center gap-[18px] p-[clamp(28px,3.5vw,58px)] md:sticky md:top-0 md:h-screen">
+              <motion.h2 variants={fadeUp} className={`${oswald.className} max-w-[4ch] text-[clamp(54px,6vw,86px)] uppercase leading-[.92]`}>Never Average</motion.h2>
+              <motion.div variants={fadeUp} className={`${oswald.className} text-[clamp(30px,3vw,52px)] uppercase leading-[.95]`}>Transform<br />Your Journey</motion.div>
+              <motion.button variants={fadeUp} whileHover={{ y: -2 }} className="group relative inline-flex min-h-11 w-fit items-center gap-2 overflow-hidden rounded-full border-2 border-[#1b1b1b] bg-white px-[22px] text-[15px] font-bold uppercase">
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-white">Shop Now</span>
+                <ArrowRight className="relative z-10 size-4 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white" />
+                <span className="absolute inset-0 -translate-x-full bg-black transition-transform duration-300 group-hover:translate-x-0" />
               </motion.button>
-            </motion.form>
+            </motion.div>
+            <motion.div className="relative overflow-hidden min-h-[420px]" {...animateImage}>
+              <Image src="/hero-bg.png" alt="Transform your journey reference screen" fill className="object-cover" />
+            </motion.div>
+          </section>
+
+          <div className="flex items-center justify-between bg-white px-[30px] py-[26px]">
+            <div className={`${oswald.className} text-[clamp(34px,3.5vw,54px)] uppercase leading-[.92]`}>Best Sellers</div>
+            <div>View all</div>
           </div>
-        </motion.div>
 
-        {/* True Footer */}
-        <div className="text-center text-zinc-600 text-[10px] font-mono uppercase tracking-widest mt-12">
-          © 2026 GET ENHANCED. ALL RIGHTS RESERVED. <br className="md:hidden" /> | BUILT FOR THE ELITE.
-        </div>
-      </section>
+          <section className="border-b border-black/10 bg-[#faf8f4] p-[clamp(28px,4vw,64px)]">
+            <div className="grid items-start gap-[clamp(24px,3vw,50px)] md:grid-cols-[.96fr_1.04fr]">
+              <motion.div className="relative min-h-[620px] overflow-hidden rounded-[10px] bg-[#0d0d0d] shadow-[0_20px_50px_rgba(0,0,0,.08)]" {...animateImage}>
+                <Image src="/hero-bg.png" alt="Our story reference screen" fill className="object-cover" />
+              </motion.div>
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }} variants={stagger} className="md:sticky md:top-10">
+                <motion.h2 variants={fadeUp} className={`${oswald.className} mb-[18px] text-[clamp(52px,5vw,80px)] uppercase leading-[.92]`}>Our Story</motion.h2>
+                {[
+                  'If you’ve ever started going to the gym, you probably remember why. For most people, it’s simple. You want abs, you want to look better or maybe you just want to feel more confident. So you start training.',
+                  'At first it’s all about the mirror... checking if anything has changed yet. But if you stick with it long enough, something shifts.',
+                  'You stop worrying so much about abs. You start thinking about getting stronger, beating your last workout or becoming more disciplined.',
+                  'And somewhere along the way, you realize the gym was never really about getting abs. It’s about the person you’re becoming. More focused. More consistent. A little stronger every day.',
+                  'And deep down, we’re all chasing the same thing — to be better than we were yesterday. That’s the mindset behind Get Enhanced.',
+                  'Our journey goes beyond physical transformation, helping people exceed expectations and win in all areas of life. We just believe that when someone is putting in real work, their supplements should actually support that effort — with clean ingredients, honest formulations, and no unnecessary hype.',
+                  'Because at the end of the day, progress isn’t about being perfect. It’s about showing up, putting in the work, and moving forward — one step at a time.',
+                  'And if that’s the mindset you live by, you’re already part of Get Enhanced.',
+                ].map((p) => (
+                  <motion.p key={p} variants={fadeUp} className="mb-[14px] max-w-[42ch] text-[clamp(15px,1.25vw,18px)] leading-[1.5] text-[#212121]">{p}</motion.p>
+                ))}
+                <motion.div variants={fadeUp} className={`${caveat.className} mt-4 text-[clamp(34px,3.2vw,56px)]`}>Never Settle For Average!</motion.div>
+              </motion.div>
+            </div>
+          </section>
 
-    </main>
+          <div className="bg-white px-5 pb-[34px] pt-[18px] text-center text-[clamp(28px,3vw,48px)] text-[#272727]">Fueling Performance, Everywhere.</div>
+
+          <section className="border-b border-black/10 bg-[#f1efeb] p-[clamp(28px,4vw,66px)]">
+            <div className="grid items-stretch gap-[clamp(24px,3vw,50px)] md:grid-cols-2">
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
+                <motion.h2 variants={fadeUp} className={`${oswald.className} mb-[26px] text-[clamp(48px,5vw,74px)] uppercase leading-[.92]`}>The Enhanced Code</motion.h2>
+                <div className="grid gap-6">
+                  {[
+                    ['1. Performance-First Formulation', 'Every formula is built to deliver real results — not trends, not hype. Just what works.'],
+                    ['2. Raw Ingredient Integrity', 'We don’t just choose ingredients — we choose where they come from. Purity, sourcing, and consistency are non-negotiable.'],
+                    ['3. Third-Party Tested', 'Our supplements undergo rounds of testing, rigorous ingredient validation, and trusted third-party certification — ensuring uncompromised quality and accuracy.'],
+                    ['4. Transparent Labels', 'No proprietary blends. Nothing hidden. Every ingredient, precisely disclosed with its exact dose.'],
+                  ].map(([title, body]) => (
+                    <motion.article key={title} variants={fadeUp} className="group">
+                      <h3 className={`${oswald.className} mb-1.5 text-[clamp(28px,2.5vw,40px)] leading-none`}>{title}</h3>
+                      <p className="max-w-[34ch] text-[clamp(16px,1.25vw,20px)] leading-[1.45] text-[#222]">{body}</p>
+                    </motion.article>
+                  ))}
+                </div>
+              </motion.div>
+              <motion.div className="relative min-h-[760px] overflow-hidden bg-[#ddd8d2]" {...animateImage}>
+                <Image src="/hero-bg.png" alt="The Enhanced Code reference screen" fill className="object-cover" />
+              </motion.div>
+            </div>
+          </section>
+
+          <div className={`${oswald.className} bg-[#ece9e3] px-4 pb-7 pt-6 text-center text-[clamp(40px,4vw,68px)] uppercase leading-[.95]`}>
+            Verified Customer Reviews
+          </div>
+        </main>
+      </div>
+    </div>
   );
 }
