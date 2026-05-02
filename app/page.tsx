@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { Caveat, Inter, Oswald } from 'next/font/google';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 
 const oswald = Oswald({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'] });
@@ -85,7 +84,7 @@ export default function Page() {
               <motion.div variants={fadeUp} className={`${oswald.className} text-[clamp(30px,3vw,52px)] uppercase leading-[.95]`}>Transform<br />Your Journey</motion.div>
               <motion.button variants={fadeUp} whileHover={{ y: -2 }} className="group relative inline-flex min-h-11 w-fit items-center gap-2 overflow-hidden rounded-full border-2 border-[#1b1b1b] bg-white px-[22px] text-[15px] font-bold uppercase">
                 <span className="relative z-10 transition-colors duration-300 group-hover:text-white">Shop Now</span>
-                <ArrowRight className="relative z-10 size-4 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white" />
+                <span className="relative z-10 text-sm transition-all duration-300 group-hover:translate-x-1 group-hover:text-white">→</span>
                 <span className="absolute inset-0 -translate-x-full bg-black transition-transform duration-300 group-hover:translate-x-0" />
               </motion.button>
             </motion.div>
